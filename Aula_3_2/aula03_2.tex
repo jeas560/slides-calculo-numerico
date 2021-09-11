@@ -1,0 +1,473 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{lmodern}
+\usetheme{default}
+\usecolortheme{beaver}
+\usepackage{graphicx,xcolor}
+\usepackage{amsmath}
+
+
+\newtheorem{definicao}[theorem]{Definição}
+\newtheorem{teorema}[theorem]{Teorema}
+\newtheorem{solucao}[theorem]{Solução}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\def\th@mystyle{%
+	\ttfamily 
+	\setbeamercolor{block title example}{bg=red!30,fg=black}
+	\setbeamercolor{block body example}{bg=red!10,fg=black!80}
+	\def\inserttheoremblockenv{exampleblock}
+}
+\makeatother
+\theoremstyle{mystyle}
+\newtheorem{algoritmo}[theorem]{Algoritmo}
+
+\title{Resolução de Sistemas Lineares - Parte II}
+\author
+{
+	Prof. Jonathan Esteban Arroyo Silva	
+}
+\institute
+{
+	Departamento de Ciência da Computação\\
+	Universidade Federal de São João del-Rei\\
+	\texttt{silva.jea@ufsj.edu.br}
+}
+\date{}
+\logo{\includegraphics[width=0.2\linewidth]{../ufsj-logo-site}}
+
+\begin{document}
+	
+\begin{frame}[plain]
+    \maketitle
+\end{frame}
+
+\begin{frame}[plain]
+	\frametitle{Sumário}
+	\tableofcontents
+\end{frame}
+
+\section{Métodos Iterativos}
+
+\begin{frame}
+	\frametitle{Introdução}
+	Como comentado na aula passada,
+	\begin{itemize}
+		\item Métodos iterativos: Geram uma sequência de vetores a partir de uma aproximação inicial e, sob certas condições, essa sequência converge para a solução do problema
+		\item Existem muitos métodos iterativos para a solução de sistemas lineares, entretanto só iremos estudar dois dos chamados métodos iterativos \textbf{estacionários}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Definição}
+	Um método iterativo, escrito da forma:
+	\begin{equation*}
+		\mathbf{x}^{(k+1)} = \mathbf{B}\mathbf{x}^{(k)} + \mathbf{c}
+	\end{equation*}
+	é dito \textbf{estacionário} quando a matriz \textbf{B} for fixa durante o processo iterativo.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Normas de Vetores}
+	Para analisar o erro envolvido nas aproximações, será preciso associar a cada vetor e matriz um valor escalar não negativo.
+	Assim, utilizaremos o conceito de norma de vetores, sendo as mais comuns:
+	\begin{itemize}
+		\item Norma Euclidiana ou norma $ L_{2} $:
+		\begin{equation*}
+			\| \mathbf{x} \|_{2} = (x_{1}^{2} + x_{2}^{2} +\ldots+ x_{n}^{2} )^{1/2}
+		\end{equation*}
+		\item Norma infinito:
+		\begin{equation*}
+			\| \mathbf{x} \|_{\infty} = \max_{1\leq i \leq n} |x_{i}|
+		\end{equation*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Normas de Matrizes}
+	Analogamente, as normas mais comuns para matrizes são:
+	\begin{itemize}
+		\item Norma de Frobenius:
+		\begin{equation*}
+			\| \mathbf{A} \|_{F} = \sqrt{\sum_{i=1}^{n}\sum_{j=1}^{n} |a_{ij}|^{2}}
+		\end{equation*}
+		\item Norma infinito:
+		\begin{equation*}
+			\| \mathbf{A} \|_{\infty} = \max_{1\leq i \leq n} \sum_{j=1}^{n} |a_{ij}|
+		\end{equation*}
+		ou a maior soma absoluta das linhas
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exemplo}
+	Calcule a norma infinito da matriz $ \mathbf{A} = \left[
+	\begin{array}{cc}
+		4 & 6 \\
+		-3 & 4 
+	\end{array}
+	\right]  $
+	\pause
+	
+	Como a soma em módulo da primeira e segunda linha, é, respectivamente, 10 e 7, o máximo entre as duas opções é 10, assim:
+	\begin{equation*}
+		\| \mathbf{A} \|_{\infty} = 10
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Critério de parada}
+	Desta forma, a distância entre dois vetores pode ser calculada, como a seguir:
+	\begin{equation*}
+		\| \mathbf{x} - \mathbf{y} \|_{2} \;\;\; \mbox{ ou } \;\;\; 	\| \mathbf{x} - \mathbf{y} \|_{\infty} 
+	\end{equation*}
+	
+	Neste sentido, sendo, $ \mathbf{x}^{(k)} $ e $ \mathbf{x}^{(k-1)} $, duas aproximações para o vetor solução $ \mathbf{x}^{*} $, é possível definir o critério de parada (para o caso da norma infinto) como:
+	\begin{equation*}
+		\dfrac{\| \mathbf{x}^{(k)} - \mathbf{x}^{(k-1)}\|_{\infty}}{\| \mathbf{x}^{(k)} \|_{\infty} }	= \dfrac{\max_{(1\leq i \leq n)}| x_{i}^{(k)} - x_{i}^{(k-1)}|}{\max_{(1\leq i \leq n)}| x_{i}^{(k)} | } < \epsilon	
+	\end{equation*}
+	onde $ \epsilon $ representa a precisão desejada.
+	\pause
+	
+	\alert{Não esquecer de sempre definir um $ k_{max} $}
+\end{frame}
+
+\section{Método de Jacobi}
+
+\begin{frame}
+	\frametitle{Método de Jacobi - Caso $ 3\times3 $}
+	A fim de ilustrar a ideia do método de Jacobi, aplicaremos o método para o caso de um sistema $ 3\times3 $, como a seguir:
+	\begin{gather*}
+		a_{11} x_1 + a_{12} x_2 + a_{13} x_3 = b_1 \\
+		a_{21} x_1 + a_{22} x_2 + a_{23} x_3 = b_2 \\
+		a_{31} x_1 + a_{32} x_2 + a_{33} x_3 = b_3
+	\end{gather*}  
+
+	o qual pode ser escrito como:
+	\begin{gather*}
+		x_1 = ( b_1 - a_{12} x_2 - a_{13} x_3 ) / a_{11}\\
+		x_2 = ( b_2 - a_{21} x_1 - a_{23} x_3 ) / a_{22}\\
+		x_3 = ( b_3 - a_{31} x_1 - a_{32} x_2 ) / a_{33}
+	\end{gather*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Processo de iteração}
+	A partir de uma aproximação inicial:
+	\begin{equation*}
+		\mathbf{x}^{0} = \left[
+		\begin{array}{c}
+			x_{1}^{0}  \\
+			x_{2}^{0} \\
+			x_{3}^{0}
+		\end{array}
+		\right]
+	\end{equation*}
+
+	É possível calcular uma nova aproximação $ \mathbf{x}^{1} $, utilizando o esquema apresentado anteriormente, como a seguir:
+	\begin{gather*}
+		x_1^{1} = ( b_1 - a_{12} x_2^{0} - a_{13} x_3^{0} ) / a_{11}\\
+		x_2^{1} = ( b_2 - a_{21} x_1^{0} - a_{23} x_3^{0} ) / a_{22}\\
+		x_3^{1} = ( b_3 - a_{31} x_1^{0} - a_{32} x_2^{0} ) / a_{33}
+	\end{gather*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Método de Jacobi - Caso geral}
+	Para o caso geral, a partir de uma aproximação inicial teremos, \alert{para cada passo de iteração $ k $}:
+	\begin{algoritmo}
+		Para i = 1,$\ldots$,n, faça:\\
+		\quad soma$ \_ $parcial $\leftarrow$ b$ _{\texttt{i}} $\\
+		\quad Para j = 1,$\ldots$,i-1, faça:\\
+		\quad\quad soma$ \_ $parcial $\leftarrow$ soma$ \_ $parcial - a$ _{\texttt{ij}} $x$ _{\texttt{j}}^{\texttt{k-1}} $\\
+		\quad Para j = i+1,$\ldots$,n, faça:\\
+		\quad\quad soma$ \_ $parcial $\leftarrow$ soma$ \_ $parcial - a$ _{\texttt{ij}} $x$ _{\texttt{j}}^{\texttt{k-1}} $\\
+		\quad x$ _{\texttt{i}}^{\texttt{k}} \leftarrow$ soma$ \_ $parcial/a$ _{\texttt{ii}} $
+	\end{algoritmo}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exemplo}
+	Resolva o seguinte sistema pelo método de Jacobi, utilizando como vetor inicial $ \mathbf{x}^{0} = \mathbf{0}$:
+	\begin{gather*}
+		4 x_1 + 0.24 x_2 - 0.08 x_3 = 8 \\
+		0.09 x_1 + 3 x_2 - 0.15 x_3 = 9 \\
+		0.04 x_1 - 0.08 x_2 + 4 x_3 = 20
+	\end{gather*} 
+	\pause 
+	
+	Utilizando o esquema de iteração:
+	\begin{gather*}
+		x_1^{k} = ( 8 - 0.24 x_2^{k-1} + 0.08 x_3^{k-1} ) / 4\\
+		x_2^{k} = ( 9 - 0.09 x_1^{k-1} + 0.15 x_3^{k-1} ) / 3\\
+		x_3^{k} = ( 20 - 0.04 x_1^{k-1} + 0.08 x_2^{k-1} ) / 4
+	\end{gather*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exemplo}
+	Para $ k=1 $ teremos:
+	\begin{gather*}
+		x_1^{1} = ( 8 - 0.24 x_2^{0} + 0.08 x_3^{0} ) / 4 = 8/4 = 2\\
+		x_2^{1} = ( 9 - 0.09 x_1^{0} + 0.15 x_3^{0} ) / 3 = 9/3 = 3\\
+		x_3^{1} = ( 20 - 0.04 x_1^{0} + 0.08 x_2^{0} ) / 4 = 20/4 = 5
+	\end{gather*}
+
+	Assim, a solução para os primeiros 3 passos de iteração $ k $ será dada por:
+	\begin{table}
+		\centering
+		\begin{tabular}{c|c|c|c|c}
+			k & 0 & 1 & 2 & 3 \\
+			\hline
+			\hline
+			$ x_1 $ & 0 & 2 & 1.92 & 1.91 \\
+			$ x_2 $ & 0 & 3 & 3.19 & 3.1944 \\
+			$ x_3 $ & 0	& 5 & 5.04 & 5.0446 
+		\end{tabular}
+	\end{table}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Matriz de iteração do método de Jacobi}
+	O método de Jacobi aplicado num sistema de equações lineares pode ser visto de forma matricial como:
+	\begin{align*}
+		\mathbf{A}\mathbf{x} = \mathbf{b} \Rightarrow&  \left( \mathbf{L} + \mathbf{D} + \mathbf{U}\right) \mathbf{x} = \mathbf{b} \\
+		\Rightarrow&  \mathbf{D}\mathbf{x} = \mathbf{b} - \left( \mathbf{L} + \mathbf{U}\right) \mathbf{x}
+	\end{align*}
+	onde \textbf{L}, \textbf{D} e \textbf{U}, são respectivamente, matrizes da forma triangular inferior, diagonal e triangular superior.
+	
+	Ao aplicar o processo iterativo, na expressão anterior teremos:
+	\begin{gather*}
+		\mathbf{D}\mathbf{x}^{(k)} = \mathbf{b} - \left( \mathbf{L} + \mathbf{U}\right) \mathbf{x}^{(k-1)}\\
+		\mathbf{x}^{(k)} = - \mathbf{D}^{-1} \left( \mathbf{L} + \mathbf{U}\right) \mathbf{x}^{(k-1)}  + \mathbf{D}^{-1} \mathbf{b}\\
+		\mathbf{x}^{(k)} =  \mathbf{B}_{J} \mathbf{x}^{(k-1)} + \mathbf{c}  \\
+	\end{gather*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Convergência}
+	Sendo a \textbf{matriz de iteração} do método de Jacobi dada por:
+	\begin{equation*}
+		  \mathbf{B}_{J} = - \mathbf{D}^{-1} \left( \mathbf{L} + \mathbf{U}\right)
+	\end{equation*}
+	o método convergirá se:
+	\begin{equation*}
+		\|\mathbf{B}_{J}\|_{\infty} < 1
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Critério das linhas}
+	Sendo $ \alpha_{i} = \sum_{j=1, i\neq j}^{n} \left| \dfrac{a_{ij}}{a_{ii}}\right| $ para $ i = 1,\dots,n $, se $ \alpha = \max\{\alpha_{i}\} < 1 $, então o método de Jacobi converge independentemente da aproximação inicial $ \mathbf{x}^{0} $.
+	
+	Verifique se a matriz \textbf{A} abaixo satisfaz o critério das linhas:
+	\begin{equation*}
+		\mathbf{A} = \left[
+		\begin{array}{ccc}
+			4 & 0.24 & -0.08 \\
+			0.09 & 3 & -0.15 \\
+			0.04 & -0.08 & 4  
+		\end{array}
+		\right]
+	\end{equation*}
+	\pause
+	
+	Resposta: Como $ \alpha = 0.08 < 1 $, então a matriz \textbf{A} satisfaz o critério das linhas.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Matriz estritamente diagonal dominante}
+	Uma matriz \textbf{A} é estritamente diagonal dominante se:
+	\begin{equation*}
+		\sum_{j=1, i\neq j}^{n} |a_{ij}| < |a_{ii}|, \;\; i = 1,\dots,n
+	\end{equation*}
+	
+	Matrizes estritamente diagonal dominante satisfazem o critério das linhas, portanto, o método de Jacobi converge para este tipo de matrizes.
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exemplo - Implementação}
+	\centering
+	\href{https://colab.research.google.com/drive/1ctTIw4RQBe6uECS21G-Q7hSQEm_5a8ha?usp=sharing}{\beamergotobutton{Link para exemplo interativo}}
+\end{frame}
+
+\section{Método de Gauss-Seidel}
+
+\begin{frame}
+	\frametitle{Método de Gauss-Seidel - Introdução}
+	\begin{itemize}
+		\item O método de Gauss-Seidel pode ser visto como uma modificação do método de Jacobi
+		\item Será utilizado a mesma forma de iterar que o método de Jacobi, aproveitando os cálculos parciais das componentes das linhas anteriores
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Método de Gauss-Seidel - Caso $ 3\times3 $}
+	A partir de uma aproximação inicial:
+	\begin{equation*}
+		\mathbf{x}^{0} = \left[
+		\begin{array}{c}
+			x_{1}^{0}  \\
+			x_{2}^{0} \\
+			x_{3}^{0}
+		\end{array}
+		\right]
+	\end{equation*}
+	
+	É possível calcular uma nova aproximação $ \mathbf{x}^{1} $, utilizando o esquema apresentado anteriormente, como a seguir:
+	\begin{gather*}
+		x_1^{\alert{1}} = ( b_1 - a_{12} x_2^{0} - a_{13} x_3^{0} ) / a_{11}\\
+		x_2^{\alert{1}} = ( b_2 - a_{21} x_1^{\alert{1}} - a_{23} x_3^{0} ) / a_{22}\\
+		x_3^{\alert{1}} = ( b_3 - a_{31} x_1^{\alert{1}} - a_{32} x_2^{\alert{1}} ) / a_{33}
+	\end{gather*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Método de Gauss-Seidel - Caso geral}
+	Para o caso geral, a partir de uma aproximação inicial teremos, \alert{para cada passo de iteração $ k $}:
+	\begin{algoritmo}
+		Para i = 1,$\ldots$,n, faça:\\
+		\quad soma$ \_ $parcial $\leftarrow$ b$ _{\texttt{i}} $\\
+		\quad Para j = 1,$\ldots$,i-1, faça:\\
+		\quad\quad soma$ \_ $parcial $\leftarrow$ soma$ \_ $parcial - a$ _{\texttt{ij}} $x$ _{\texttt{j}}^{\texttt{k}} $\\
+		\quad Para j = i+1,$\ldots$,n, faça:\\
+		\quad\quad soma$ \_ $parcial $\leftarrow$ soma$ \_ $parcial - a$ _{\texttt{ij}} $x$ _{\texttt{j}}^{\texttt{k-1}} $\\
+		\quad x$ _{\texttt{i}}^{\texttt{k}} \leftarrow$ soma$ \_ $parcial/a$ _{\texttt{ii}} $
+	\end{algoritmo}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exemplo}
+	Resolva o seguinte sistema pelo método de Gauss-Seidel, utilizando como vetor inicial $ \mathbf{x}^{0} = \mathbf{0}$:
+	\begin{gather*}
+		4 x_1 + 0.24 x_2 - 0.08 x_3 = 8 \\
+		0.09 x_1 + 3 x_2 - 0.15 x_3 = 9 \\
+		0.04 x_1 - 0.08 x_2 + 4 x_3 = 20
+	\end{gather*} 
+	\pause 
+	
+	Utilizando o esquema de iteração:
+	\begin{gather*}
+		x_1^{k} = ( 8 - 0.24 x_2^{k-1} + 0.08 x_3^{k-1} ) / 4\\
+		x_2^{k} = ( 9 - 0.09 x_1^{k} + 0.15 x_3^{k-1} ) / 3\\
+		x_3^{k} = ( 20 - 0.04 x_1^{k} + 0.08 x_2^{k} ) / 4
+	\end{gather*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exemplo}
+	Para $ k=1 $ teremos:
+	\begin{gather*}
+		x_1^{1} = ( 8 - 0.24 \cdot 0 + 0.08 \cdot 0 ) / 4 = 8/4 = 2\\
+		x_2^{1} = ( 9 - 0.09 \cdot \alert{2} + 0.15 \cdot 0 ) / 3 = (9 - 0.18)/3 = 2.94\\
+		x_3^{1} = ( 20 - 0.04 \cdot \alert{2} + 0.08\cdot \alert{2.94} ) / 4 = 5.0388
+	\end{gather*}
+	
+	Assim, a solução para os primeiros 3 passos de iteração $ k $ será dada por:
+	\begin{table}
+		\centering
+		\begin{tabular}{c|c|c|c|c}
+			k & 0 & 1 & 2 & 3 \\
+			\hline
+			\hline
+			$ x_1 $ & 0 & 2 & 1.924376 & 1.909240 \\
+			$ x_2 $ & 0 & 3.94 & 3.194209 & 3.194955 \\
+			$ x_3 $ & 0	& 5.0388 & 5.044640 & 5.044807
+		\end{tabular}
+	\end{table}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Matriz de iteração do método de Gauss-Seidel}
+	O método de Jacobi aplicado num sistema de equações lineares pode ser visto de forma matricial como:
+	\begin{align*}
+		\mathbf{A}\mathbf{x} = \mathbf{b} \Rightarrow&  \left( \mathbf{L} + \mathbf{D} + \mathbf{U}\right) \mathbf{x} = \mathbf{b} \\
+		\Rightarrow&  \left( \mathbf{L} + \mathbf{D}\right)\mathbf{x} = \mathbf{b} - \mathbf{U} \mathbf{x}
+	\end{align*}
+	onde \textbf{L}, \textbf{D} e \textbf{U}, são respectivamente, matrizes da forma triangular inferior, diagonal e triangular superior.
+	
+	Ao aplicar o processo iterativo, na expressão anterior teremos:
+	\begin{gather*}
+		\left( \mathbf{L} + \mathbf{D}\right)\mathbf{x}^{(k)} = \mathbf{b} - \mathbf{U} \mathbf{x}^{(k-1)}\\
+		\mathbf{x}^{(k)} = - \left( \mathbf{L} + \mathbf{D}\right)^{-1} \mathbf{U} \mathbf{x}^{(k-1)}  + \left( \mathbf{L} + \mathbf{D}\right)^{-1} \mathbf{b}\\
+		\mathbf{x}^{(k)} =  \mathbf{B}_{GS} \mathbf{x}^{(k-1)} + \mathbf{c}  \\
+	\end{gather*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Convergência}
+	Sendo a \textbf{matriz de iteração} do método de Gauss-Seidel dada por:
+	\begin{equation*}
+		\mathbf{B}_{GS} = - \left( \mathbf{L} + \mathbf{D}\right)^{-1} \mathbf{U}
+	\end{equation*}
+	o método convergirá se:
+	\begin{equation*}
+		\|\mathbf{B}_{GS}\|_{\infty} < 1
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Critério de Sassenfeld}
+	Sendo $ \beta{i} = \left( \sum_{j=1}^{i-1} \left| \dfrac{a_{ij}}{a_{ii}}\right|\beta{j} + \sum_{j=1+1}^{n} \left| \dfrac{a_{ij}}{a_{ii}}\right| \right) $ para $ i = 1,\dots,n $, se $ \beta = \max\{\beta_{i}\} < 1 $, então método de Gauss-Seidel converge se satisfazer o \textbf{critério de Sassenfeld}.	
+	
+	Verifique se a matriz \textbf{A} abaixo satisfaz o critério das linhas:
+	\begin{equation*}
+		\mathbf{A} = \left[
+		\begin{array}{ccc}
+			5 & 1 & 1 \\
+			3 & 4 & 1 \\
+			3 & 3 & 6 
+		\end{array}
+		\right]
+	\end{equation*}
+	\pause
+	
+	Resposta: Como $ \beta = 0.55 < 1 $, então a matriz \textbf{A} satisfaz o critério de Sassenfeld.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exemplo - Implementação}
+	\centering
+	\href{https://colab.research.google.com/drive/1QZ27rGSNhrj7Yc3CHN7KeT3ibrregMkM?usp=sharing}{\beamergotobutton{Link para exemplo interativo}}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conclusão I}	
+	Foram abordados os seguintes assuntos:
+	\begin{itemize}
+		\item Introdução aos métodos iterativos
+		\item Definição de métodos iterativos estacionários
+		\item Revisão de norma de vetores e matrizes
+		\item Critério de parada
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conclusão II}	
+	\begin{itemize}
+		\item Método de Jacobi - Caso geral
+		\item Matriz de iteração, convergência e critério das linhas para o Método de Jacobi
+		\item Definição de Matriz estritamente diagonal dominante
+		\item Método de Gauss-Seidel - Caso geral
+		\item Matriz de iteração, convergência e critério de Sassenfeld
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{../krillin_v}
+	\label{fig:luffyv}
+\end{figure}
+\end{frame}
+
+\end{document}

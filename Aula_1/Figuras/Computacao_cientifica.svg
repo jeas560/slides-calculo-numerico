@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="Computacao_cientifica.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="232.74517"
+     inkscape:cy="622.70832"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="opacity:0.5;mix-blend-mode:lighten;fill:#ff0000;stroke-width:0.264583;stroke-dasharray:0.264583, 0.79374999999999996"
+       id="path12"
+       cx="98.256271"
+       cy="119.44047"
+       r="38.55357" />
+    <circle
+       style="opacity:0.5;mix-blend-mode:lighten;fill:#0000ff;stroke-width:0.264583;stroke-dasharray:0.264583, 0.79374999999999996"
+       id="circle18"
+       cx="121.70664"
+       cy="152.77797"
+       r="38.55357" />
+    <circle
+       style="opacity:0.5;mix-blend-mode:lighten;fill:#00ff00;stroke-width:0.264583;stroke-dasharray:0.264583, 0.79374999999999996"
+       id="circle14"
+       cx="74.839302"
+       cy="152.77797"
+       r="38.55357" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0656844"
+       x="78.031166"
+       y="105.89539"
+       id="text849"><tspan
+         sodipodi:role="line"
+         id="tspan847"
+         x="78.031166"
+         y="105.89539"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif';stroke-width:0.0656844">Ciência da Computação</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0656844"
+       x="117.54945"
+       y="162.01683"
+       id="text853"><tspan
+         sodipodi:role="line"
+         id="tspan851"
+         x="117.54945"
+         y="162.01683"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif';stroke-width:0.0656844">Ciência e Engenharia</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0656844"
+       x="43.553398"
+       y="162.022"
+       id="text857"><tspan
+         sodipodi:role="line"
+         id="tspan855"
+         x="43.553398"
+         y="162.022"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif';stroke-width:0.0656844">Matemática Aplicada</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0656844"
+       x="78.625443"
+       y="145.18939"
+       id="text861"><tspan
+         sodipodi:role="line"
+         id="tspan859"
+         x="78.625443"
+         y="145.18939"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif';stroke-width:0.0656844">Computação Científica</tspan></text>
+  </g>
+</svg>
