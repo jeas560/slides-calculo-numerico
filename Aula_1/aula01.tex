@@ -7,7 +7,6 @@
 \usecolortheme{beaver}
 \usepackage{graphicx,xcolor}
 
-
 \beamertemplatenavigationsymbolsempty
 
 \title{Princípios Gerais e Erros}
@@ -76,7 +75,7 @@
 		\item Diferentes aspectos da computação científica:
 		\begin{itemize}
 			\item Trabalhar com quantidades \textit{continuas} que são geralmente medidas com números reais (por exemplo: tempo, distância, velocidade, temperatura, densidade, pressão)
-			\item Avaliar os efeitos da \textit{aproximação} 
+			\item Avaliar os efeitos das \textit{aproximações} utilizadas
 		\end{itemize}
 	\end{itemize}			
 \end{frame}
@@ -155,7 +154,7 @@
 	\begin{equation*}
 		x = \pm d \times \beta^{e}
 	\end{equation*}
-	sendo 
+	em que 
 	\begin{itemize}
 		\item $ d $ representa a mantissa;
 		\item $ \beta $ representa a base do sistema de numeração
@@ -169,11 +168,10 @@
 	\begin{equation*}
 		(0. d_{1} d_{2} d_{3}\cdots d_{t})_{\beta}
 	\end{equation*}
-	sendo
+	e possuindo as seguintes propriedades:
 	\begin{itemize}
-		\item Os dígitos da mantissa são $ 0 \leq d_{i} \leq \beta - 1 $, para $ i = 1, \ldots, t $ e com $ d_{1} \neq 0 $
-		\item Dizemos que o número esta \textbf{normalizado} quando $ d_{1} \neq 0 $
-		\item O expoente $ e $ esta no intervalo $ [m, M] $
+		\item Os dígitos da mantissa $ 0 \leq d_{i} \leq \beta - 1 $, para $ i = 1, \ldots, t $ e com $ d_{1} \neq 0 $
+		\item O número está \textbf{normalizado} quando $ d_{1} \neq 0 $
 	\end{itemize}
 \end{frame}
 
@@ -187,8 +185,8 @@
 	\begin{itemize}
 		\item $ \beta $ é a base do sistema
 		\item $ t $ é o número de dígitos da mantissa ou precisão
-		\item $ m $ é o menor valor para o expoente
-		\item $ M $	é o maior valor para o expoente
+		\item $ m $ é o menor valor para o expoente $ e $
+		\item $ M $	é o maior valor para o expoente $ e $
 	\end{itemize}
 \end{frame}
 
@@ -272,7 +270,7 @@
 
 \begin{frame}
 	\frametitle{Efeitos numéricos}
-	Outros tipos de erros são encontrados quando se realiza as operações ariméticas nas seguintes condições:
+	Outros tipos de erros são encontrados quando se realiza operações ariméticas nas seguintes condições:
 	\begin{itemize}
 	\item Soma entre dois números com ordens muito distintas
 	\item Subtração entre dois números de magnitudes semelhantes
